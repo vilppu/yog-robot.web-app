@@ -44,7 +44,7 @@ var formatTimestamp = timestamp => {
 };
 
 firebase.initializeApp({
-    "messagingSenderId": "900133155210"
+    "messagingSenderId": ""
 });
 
 const messaging = firebase.messaging();
