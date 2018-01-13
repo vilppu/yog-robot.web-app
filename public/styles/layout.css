@@ -1,0 +1,85 @@
+header {
+    text-align: right;
+    width: 100%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-transform: uppercase;
+}
+
+header a {    
+    padding: 6px;
+}
+
+.sensor {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.sensor-details {
+    margin-left: 1em;
+}
+
+.sensor-details .battery::before {
+    content: "🔋";
+}
+
+.sensor-details .rssi::before {
+    content: "📶";
+}
+
+.history {
+    margin-top: 1em;
+}
+
+.sensor-status .sensor-name,
+.history-entry .sensor-name,
+.history-entry .timestamp,
+.history-entry .measurement
+ {
+    display: inline-block;
+}
+
+.sensor-status .measurement {
+    display: inline-block;
+    padding: 6px;
+    border: 3px solid whitesmoke;
+    border-radius: 20%;
+    text-transform: uppercase;
+}
+
+.sensor-status .measurement.Temperature::after, 
+.history-entry .measurement.Temperature::after {
+    content: "°C";
+}
+
+.sensor-status .measurement.RelativeHumidity::after,
+.history-entry .measurement.RelativeHumidity::after {
+    content: "%";
+}
+
+.sensor-status .measurement.BatteryVoltage::after,
+.history-entry .measurement.BatteryVoltage::after {
+    content: "V";
+}
+
+.sensor-status .measurement.Rssi::after,
+.history-entry .measurement.Rssi::after {
+    content: "db";
+}
+
+/*.sensor-details .edit-name::after {
+    content: attr(data-name);
+}*/
+
+@media only screen and (max-width: 500px) {
+    #content {
+        width: 100%
+    }
+}
+@media only screen and (min-width: 501px) {
+    #content {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
