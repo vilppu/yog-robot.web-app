@@ -4,9 +4,11 @@
 <head>
   <meta charset="utf-8">
   <link rel=icon href=favicon.png sizes="16x16" type="image/png">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="styles/styles.css?2018-01-13">
+  <script src="https://cdn.auth0.com/js/lock/10.14/lock.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/styles/styles.css"> -->
   <meta name="theme-color">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
   />
@@ -14,61 +16,7 @@
 </head>
 
 <body>
-  <header>
-    <a href="#" id="logout">Poistu</a>
-  </header>
-
-  <div id="content">
-    <!-- toast -->
-    <div id="toast">
-      <div id="toastTitle"></div>
-      <div id="toastBody"></div>
-    </div>
-
-    <!-- sensors -->
-    <div id="devices">
-    </div>
-  </div>
-
-  <!-- Templates -->
-  <template id="sensor-template">
-    <div class="sensor">
-      <a href="#" class="sensor-status">
-        <div class="sensor-name"></div>
-        <div class="measurement"></div>
-      </a>
-      <div class="sensor-details" style="display: none">
-        <span class="battery"></span><span class="rssi"></span><a href="#" class="edit-name">&#9998;</a>
-
-        <div class="name-editor" style="display: none">
-          <input class="edited-name"></input>
-          <a href="#" class="confirm-edit-name">Tallenna</a>
-          <a href="#" class="cancel-edit-name">Peruuta</a>.
-        </div>
-
-        <div class="history"></div>
-      </div>
-    </div>
-  </template>
-
-  <template id="history-entry-template">
-    <div class="history-entry">
-      <div class="timestamp"></div>
-      <div class="measurement"></div>
-    </div>
-  </template>
-
-  <script src="https://cdn.auth0.com/js/lock/10.14/lock.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
-  <script src="scripts/config.js?2018-01-13"></script>
-  <script src="scripts/measurements.js?2018-01-13"></script>
-  <script src="scripts/agent-api.js?2018-01-13"></script>
-  <script src="scripts/firebase-messaging.js?2018-01-13" async></script>
-  <script src="scripts/login.js?2018-01-13" async></script>
-  <script src="scripts/sensor-view.js?2018-01-13" async></script>
-  <script>
-    firebase.initializeApp(window.firebaseConfig);
-  </script>
+  <div id="root"></div>
 </body>
 
 </html>

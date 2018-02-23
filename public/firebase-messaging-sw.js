@@ -1,3 +1,4 @@
+
 importScripts("https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js");
 
@@ -44,7 +45,7 @@ var formatTimestamp = timestamp => {
 };
 
 firebase.initializeApp({
-    "messagingSenderId": ""
+    "messagingSenderId": "900133155210"
 });
 
 const messaging = firebase.messaging();
