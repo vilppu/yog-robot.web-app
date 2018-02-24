@@ -74,14 +74,9 @@ var ensureLoggedIn = () => {
     });
 };
 
-export function setupLogin() {
-    window.addEventListener('load', () => {
-        var logoutButton = document.getElementById("logout");
-        logoutButton.addEventListener("click", logout);
+export function login() {
+    var logoutButton = document.getElementById("logout");
+    logoutButton.addEventListener("click", logout);
 
-        ensureLoggedIn().then(user => {
-            var authenticated = new CustomEvent("authenticated", { "detail": { "user": user }});
-            document.dispatchEvent(authenticated);
-        });
-    });
+    return ensureLoggedIn();
 }

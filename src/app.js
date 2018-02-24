@@ -1,24 +1,21 @@
-import React, { Component } from 'react';
-import { firebaseConfig } from './config';
-import './toast.css';
-import './layout.css';
-
-
-import { setupServiceWorker } from "./firebase-messaging.js";
-import {setupLogin } from "./login.js";
-import {setupSensorView } from "./sensor-view.js";
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { refresh } from "./actions";
+import "./toast.css";
+import "./layout.css";
 
 class App extends Component {
+    constructor(props) {
+      super(props);
+    }
 
-    componentDidMount() {        
-        setupServiceWorker();
-        setupSensorView();
-        setupLogin();
-      }
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(refresh());
+    }
 
     render() {
-        window.firebase.initializeApp(firebaseConfig);
         return (
             <div>
             <header>
@@ -32,28 +29,28 @@ class App extends Component {
                 </div>
 
                 <div id="devices">
+                    { this.props.sensors.map((sensor) => (
+                        
+                        <div className="sensor">
+                            <a href="#" className="sensor-status">
+                                <div className="sensor-name">{sensor.sensorName}</div>
+                                <div className="measurement">{sensor.measuredValue}</div>
+                            </a>
+                            <div className="sensor-details" styles={{display: "none"}}>
+                                <span className="battery">{sensor.batteryVoltage}</span><span className="rssi">{sensor.signalStrength}</span><a href="#" className="edit-name">&#9998;</a>
+
+                                <div className="name-editor" styles={{display: "none"}}>
+                                    <input className="edited-name"></input>
+                                    <a href="#" className="confirm-edit-name">Tallenna</a>
+                                    <a href="#" className="cancel-edit-name">Peruuta</a>.
+                                </div>
+
+                                <div className="history"></div>
+                            </div>
+                        </div>
+                    )) };
                 </div>
             </div>
-
-            <template id="sensor-template">
-                <div className="sensor">
-                    <a href="#" className="sensor-status">
-                        <div className="sensor-name"></div>
-                        <div className="measurement"></div>
-                    </a>
-                    <div className="sensor-details" styles={{display: 'none'}}>
-                        <span className="battery"></span><span className="rssi"></span><a href="#" className="edit-name">&#9998;</a>
-
-                        <div className="name-editor" styles={{display: 'none'}}>
-                            <input className="edited-name"></input>
-                            <a href="#" className="confirm-edit-name">Tallenna</a>
-                            <a href="#" className="cancel-edit-name">Peruuta</a>.
-                        </div>
-
-                        <div className="history"></div>
-                    </div>
-                </div>
-            </template>
 
             <template id="history-entry-template">
                 <div className="history-entry">
@@ -65,5 +62,20 @@ class App extends Component {
         );
     }
 }
+ 
+App.propTypes = {  
+  sensors: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
-export default App;
+function mapStateToProps(state) {
+    const { sensors } = state 
+        const { sensors: [] } = { sensors: [] };
+   
+    return {
+        sensors
+    };
+  };
+   
+export default connect(mapStateToProps)(App)
+
