@@ -1,5 +1,5 @@
 import { login } from "./login.js";
-import { authenticate, getOverview } from "./agent-api.js";
+import { authenticate, getSensors } from "./agent-api.js";
 import { setupServiceWorker } from "./firebase-messaging.js";
 import { firebaseConfig } from "./config";
 import {
@@ -14,7 +14,7 @@ import {
     RECEIVED_HISTORY
 } from "./constants";
 
-const getSensors = (dispatch) => {
+const refreshSensors = (dispatch) => {
     dispatch({
         type: RECEIVING_SENSORS,
         loggedIn: true,
@@ -22,7 +22,7 @@ const getSensors = (dispatch) => {
         sensors: []
     });
 
-    return getOverview()
+    return getSensors()
         .then((sensorsJson) => {
             dispatch({
                 type: RECEIVED_SENSORS,
@@ -51,7 +51,7 @@ const authenticateToAgent = (dispatch, botId, botKey) => {
                 sensors: []
             });
 
-            return getSensors(dispatch);
+            return refreshSensors(dispatch);
         }
         );
 };
@@ -95,7 +95,7 @@ export const refresh = () => {
         const state = getState();
 
         if (state.loggedIn) {
-            return dispatch(getSensors());
+            return dispatch(refreshSensors());
         }
         else {
             return dispatch(startLogin());

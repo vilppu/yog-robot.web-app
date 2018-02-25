@@ -75,7 +75,7 @@ var httpPost = (url) => {
     return httpSend("POST", url);
 };
 
-export function getOverview() {
+export function getSensors() {
     var url = agentAPI + "/api/sensors";
 
     return httpGet(url);
