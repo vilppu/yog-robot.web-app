@@ -42,28 +42,27 @@ header a {
 .sensor-status .measurement {
     display: inline-block;
     padding: 6px;
-    border: 3px solid whitesmoke;
-    border-radius: 20%;
     text-transform: uppercase;
+    font-size: 1.2em;
 }
 
-.sensor-status .measurement.Temperature::after, 
-.history-entry .measurement.Temperature::after {
+.sensor-status .measurement .Temperature::after, 
+.history-entry .measurement .Temperature::after {
     content: "°C";
 }
 
-.sensor-status .measurement.RelativeHumidity::after,
-.history-entry .measurement.RelativeHumidity::after {
+.sensor-status .measurement .RelativeHumidity::after,
+.history-entry .measurement .RelativeHumidity::after {
     content: "%";
 }
 
-.sensor-status .measurement.BatteryVoltage::after,
-.history-entry .measurement.BatteryVoltage::after {
+.sensor-status .measurement .BatteryVoltage::after,
+.history-entry .measurement .BatteryVoltage::after {
     content: "V";
 }
 
-.sensor-status .measurement.Rssi::after,
-.history-entry .measurement.Rssi::after {
+.sensor-status .measurement .Rssi::after,
+.history-entry .measurement .Rssi::after {
     content: "db";
 }
 

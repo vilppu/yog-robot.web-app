@@ -5,9 +5,41 @@ import { refresh } from "./actions";
 import "./toast.css";
 import "./layout.css";
 
+class Sensor extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className="sensor">
+                <a href="#" className="sensor-status">
+                    <div className="sensor-name">{this.props.sensor.name}</div>
+                    <div className="measurement"><span className={this.props.sensor.measuredProperty}>{this.props.sensor.measurement}</span></div>
+                </a>
+                <div className="sensor-details" styles={{ display: "none" }}>
+                    <span className="battery">{this.props.sensor.signal}</span><span className="rssi">{this.props.sensor.signal}</span><a href="#" className="edit-name">&#9998;</a>
+
+                    <div className="name-editor" styles={{ display: "none" }}>
+                        <input className="edited-name"></input>
+                        <a href="#" className="confirm-edit-name">Tallenna</a>
+                        <a href="#" className="cancel-edit-name">Peruuta</a>
+                    </div>
+
+                    <div className="history"></div>
+                </div>
+            </div>
+        );
+    }
+}
+
+Sensor.propTypes = {
+    sensor: PropTypes.object.isRequired
+};
+
 class App extends Component {
     constructor(props) {
-      super(props);
+        super(props);
     }
 
     componentDidMount() {
@@ -18,64 +50,45 @@ class App extends Component {
     render() {
         return (
             <div>
-            <header>
-                <a href="#" id="logout">Poistu</a>
-            </header>
+                <header>
+                    <a href="#" id="logout">Poistu</a>
+                </header>
 
-            <div id="content">
-                <div id="toast">
-                    <div id="toastTitle"></div>
-                    <div id="toastBody"></div>
+                <div id="content">
+                    <div id="toast">
+                        <div id="toastTitle"></div>
+                        <div id="toastBody"></div>
+                    </div>
+
+                    <div id="devices">
+                        {this.props.sensors.map((sensor) => <Sensor sensor={sensor} />)}
+                </div>
                 </div>
 
-                <div id="devices">
-                    { this.props.sensors.map((sensor) => (
-                        
-                        <div className="sensor">
-                            <a href="#" className="sensor-status">
-                                <div className="sensor-name">{sensor.sensorName}</div>
-                                <div className="measurement">{sensor.measuredValue}</div>
-                            </a>
-                            <div className="sensor-details" styles={{display: "none"}}>
-                                <span className="battery">{sensor.batteryVoltage}</span><span className="rssi">{sensor.signalStrength}</span><a href="#" className="edit-name">&#9998;</a>
-
-                                <div className="name-editor" styles={{display: "none"}}>
-                                    <input className="edited-name"></input>
-                                    <a href="#" className="confirm-edit-name">Tallenna</a>
-                                    <a href="#" className="cancel-edit-name">Peruuta</a>.
-                                </div>
-
-                                <div className="history"></div>
-                            </div>
-                        </div>
-                    )) };
-                </div>
-            </div>
-
-            <template id="history-entry-template">
-                <div className="history-entry">
-                    <div className="timestamp"></div>
-                    <div className="measurement"></div>
-                </div>
-            </template>
+                <template id="history-entry-template">
+                    <div className="history-entry">
+                        <div className="timestamp"></div>
+                        <div className="measurement"></div>
+                    </div>
+                </template>
             </div>
         );
     }
 }
- 
-App.propTypes = {  
-  sensors: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired
+
+App.propTypes = {
+    sensors: PropTypes.array.isRequired,
+    dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-    const { sensors } = state 
-        const { sensors: [] } = { sensors: [] };
-   
+    const { sensors } = state;
+    const { sensors: [] } = { sensors: [] };
+
     return {
         sensors
     };
-  };
-   
-export default connect(mapStateToProps)(App)
+}
+
+export default connect(mapStateToProps)(App);
 

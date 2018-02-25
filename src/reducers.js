@@ -1,3 +1,4 @@
+import { mapToSensorView } from "./sensor";
 import {
     LOGGING_IN,
     LOGGED_IN,
@@ -64,7 +65,7 @@ export const rootReducer = (state = initialState, action) => {
             return {
                 loggedIn: state.loggedIn,
                 authenticatedToAgent: state.authenticatedToAgent,
-                sensors: action.sensors
+                sensors: action.sensors.map(mapToSensorView).filter(sensor => !sensor.isInActive)
             };
 
         case RECEIVING_HISTORY:
