@@ -8,15 +8,28 @@ import "./layout.css";
 class Sensor extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            expanded: false
+        };
+        this.toggleExpanded = this.toggleExpanded.bind(this);
+    }
+
+    toggleExpanded(props) {
+        const { expanded } = this.state;
+        this.setState({
+            expanded: !expanded
+        });
     }
 
     render() {
+        const { expanded } = this.state;
         return (
-            <div className="sensor">
+            <div className="sensor" onClick={this.toggleExpanded}>
                 <a href="#" className="sensor-status">
                     <div className="sensor-name">{this.props.sensor.name}</div>
                     <div className="measurement"><span className={this.props.sensor.measuredProperty}>{this.props.sensor.measurement}</span></div>
                 </a>
+                {expanded &&
                 <div className="sensor-details" styles={{ display: "none" }}>
                     <span className="battery">{this.props.sensor.signal}</span><span className="rssi">{this.props.sensor.signal}</span><a href="#" className="edit-name">&#9998;</a>
 
@@ -28,6 +41,7 @@ class Sensor extends Component {
 
                     <div className="history"></div>
                 </div>
+                }
             </div>
         );
     }
@@ -61,7 +75,7 @@ class App extends Component {
                     </div>
 
                     <div id="devices">
-                        {this.props.sensors.map((sensor) => <Sensor sensor={sensor} />)}
+                        {this.props.sensors.map((sensor) => <Sensor sensor={sensor} expanded={false} />)}
                 </div>
                 </div>
 
