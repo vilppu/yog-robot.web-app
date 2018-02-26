@@ -1,8 +1,8 @@
-export function formatNumber(number) {
+export const formatNumber = (number) => {
     return parseFloat(number).toString().replace(".", ",");
-}
+};
 
-export function formatMeasurement(measuredProperty, measuredValue) {
+export const formatMeasurement = (measuredProperty, measuredValue) => {
     switch (measuredProperty) {
         case "Temperature":
             return formatNumber(measuredValue);
@@ -30,12 +30,12 @@ export function formatMeasurement(measuredProperty, measuredValue) {
         default:
             return measuredValue;
     }
-}
+};
 
-export function formatTimestamp(timestamp) {
+export const formatTimestamp = (timestamp) => {
     var date = timestamp.getDate() + "." +  (timestamp.getMonth() + 1) + ".";
     var minutes = timestamp.getMinutes() < 10 ? "0" + timestamp.getMinutes() : timestamp.getMinutes();
     var time = "klo " + timestamp.getHours() + ":" + minutes;
 
     return date + " " + time;
-}
+};

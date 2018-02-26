@@ -130,7 +130,7 @@ var setupOverview = sensorsJson => {
     }
 };
 
-export function setupSensorView() {
+export const setupSensorView = (setupSensorView) => {
     document.addEventListener('authenticated', e => {
         authenticate(e.detail.user.botId, e.detail.user.botKey)
             .then(() => {
@@ -139,4 +139,4 @@ export function setupSensorView() {
                 }
             });
     }, false);
-}
+};

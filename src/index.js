@@ -10,7 +10,6 @@ import "./index.css";
 const store = createStore(
   rootReducer,
   { loggedIn: false,
-    authenticatedToAgent: false,
     sensors: []
   },
   applyMiddleware(

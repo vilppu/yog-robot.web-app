@@ -1,33 +1,18 @@
 import { login } from "./login.js";
-import { authenticate, getSensors } from "./agent-api.js";
+import { authenticate, getSensors, getHistory } from "./agent-api.js";
 import { setupServiceWorker } from "./firebase-messaging.js";
 import { firebaseConfig } from "./config";
 import {
-    LOGGING_IN,
-    LOGGED_IN,
-    LOGGED_OUT,
-    AUTHENTICATING_TO_AGENT,
-    AUTHENTICATED_TO_AGENT,
-    RECEIVING_SENSORS,
     RECEIVED_SENSORS,
-    RECEIVING_HISTORY,
     RECEIVED_HISTORY
 } from "./constants";
 
 const refreshSensors = (dispatch) => {
-    dispatch({
-        type: RECEIVING_SENSORS,
-        loggedIn: true,
-        authenticatedToAgent: true,
-        sensors: []
-    });
-
     return getSensors()
         .then((sensorsJson) => {
             dispatch({
                 type: RECEIVED_SENSORS,
                 loggedIn: true,
-                authenticatedToAgent: true,
                 sensors: JSON.parse(sensorsJson)
             });
             }
@@ -35,22 +20,8 @@ const refreshSensors = (dispatch) => {
 };
 
 const authenticateToAgent = (dispatch, botId, botKey) => {
-    dispatch({
-        type: AUTHENTICATING_TO_AGENT,
-        loggedIn: true,
-        authenticatedToAgent: false,
-        sensors: []
-    });
-
     return authenticate(botId, botKey)
         .then(() => {
-            dispatch({
-                type: AUTHENTICATED_TO_AGENT,
-                loggedIn: true,
-                authenticatedToAgent: true,
-                sensors: []
-            });
-
             return refreshSensors(dispatch);
         }
         );
@@ -58,35 +29,13 @@ const authenticateToAgent = (dispatch, botId, botKey) => {
 
 const startLogin = () => {
     return dispatch => {
-        dispatch({
-            type: LOGGING_IN,
-            loggedIn: false,
-            authenticatedToAgent: false,
-            sensors: []
-        });
-
         return login()
-            .then((user) => {
-                dispatch({
-                    type: LOGGED_IN,
-                    loggedIn: false,
-                    authenticatedToAgent: false,
-                    sensors: []
-                });                
+            .then((user) => {      
                 window.firebase.initializeApp(firebaseConfig);
                 setupServiceWorker();
                 return dispatch(() => authenticateToAgent(dispatch, user.botId, user.botKey));
             }
             );
-    };
-};
-
-const receiveSensors = (json) => {
-    return dispatch => {
-        return {
-            type: RECEIVING_SENSORS,
-            sensors: json.data()
-        };
     };
 };
 
@@ -100,5 +49,21 @@ export const refresh = () => {
         else {
             return dispatch(startLogin());
         }
+    };
+};
+
+export const refreshHistory = (sensor) => {
+    return (dispatch, getState) => {
+        const state = getState();
+
+        return getHistory(sensor.sensorId, sensor.measuredProperty)
+            .then((sensorsHistoryJson) => {
+                dispatch({
+                    type: RECEIVED_HISTORY,
+                    sensor: sensor,
+                    history: JSON.parse(sensorsHistoryJson)
+                });
+                }
+            );
     };
 };

@@ -4,11 +4,11 @@ var storeToken = function (token) {
     localStorage.setItem("botToken", token);
 };
 
-export function getToken() {
+export const getToken = (getToken) => {
     return localStorage.getItem("botToken");
-}
+};
 
-export function authenticate(botId, botKey) {
+export const authenticate = (botId, botKey) => {
     return new Promise((resolve, reject) => {
         var uri = agentAPI + "/api/tokens/device-group";
         var request = new XMLHttpRequest();
@@ -32,7 +32,7 @@ export function authenticate(botId, botKey) {
         request.setRequestHeader("yog-robot-device-group-key", botKey);
         request.send(null);
     });
-}
+};
 
 var httpSend = (method, url) => {
 
@@ -75,26 +75,26 @@ var httpPost = (url) => {
     return httpSend("POST", url);
 };
 
-export function getSensors() {
+export const getSensors = (getSensors) => {
     var url = agentAPI + "/api/sensors";
 
     return httpGet(url);
-}
+};
 
-export function  getHistory(sensorId, measeuredProperty) {
+export const getHistory = (sensorId, measeuredProperty) => {
     var uri = agentAPI + "/api/sensor/" + sensorId + "/history";
 
     return httpGet(uri);
-}
+};
 
-export function setSensorName (sensorId, sensorName) {
+export const setSensorName = (sensorId, sensorName) => {
     var uri = agentAPI + "/api/sensor/" + sensorId + "/name/" + sensorName;
 
     return httpPost(uri);
-}
+};
 
-export function registerClient (token) {
+export const registerClient = (token) => {
     var uri = agentAPI + "/api/push-notifications/subscribe/" + token + "/";
 
     return httpPost(uri);
-}
+};

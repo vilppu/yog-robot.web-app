@@ -74,9 +74,9 @@ var ensureLoggedIn = () => {
     });
 };
 
-export function login() {
+export const login = (login) => {
     var logoutButton = document.getElementById("logout");
     logoutButton.addEventListener("click", logout);
 
     return ensureLoggedIn();
-}
+};

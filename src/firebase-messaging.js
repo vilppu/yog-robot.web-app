@@ -76,7 +76,7 @@ var registerServiceWorker = () => {
     }
 };
 
-export function setupServiceWorker() {
+export const setupServiceWorker = (setupServiceWorker) => {
     window.addEventListener('load', () => {
         registerServiceWorker();
     });
