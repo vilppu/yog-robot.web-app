@@ -21,7 +21,7 @@ export const isActive = (sensor) => {
 
 export const mapToSensorView = (sensor) => {
     return {
-        key: sensor.sensorId + "." + sensor.measuredProperty,
+        key: `${sensor.sensorId}:${sensor.measuredProperty}`,
         sensorId: sensor.sensorId,
         name: sensor.sensorName,
         battery: sensor.batteryVoltage + "V",
@@ -34,12 +34,10 @@ export const mapToSensorView = (sensor) => {
 };
 
 const mapToHistoryEntryView = (sensor, entry) => {    
-    const timestamp = formatTimestamp(new Date(entry.timestamp));
-
     return {
-        key: timestamp,
+        key: `${entry.timestamp}:${entry.measuredValue}`,
         measurement: formatMeasurement(sensor.measuredProperty, entry.measuredValue),
-        timestamp: timestamp,
+        timestamp: formatTimestamp(new Date(entry.timestamp)),
         measuredProperty: sensor.measuredProperty
     };
 };
@@ -47,11 +45,13 @@ const mapToHistoryEntryView = (sensor, entry) => {
 export const mapSensorViewWithHistory = (sensor, history) => {
     return {
         key: sensor.key,
+        sensorId: sensor.sensorId,
         name: sensor.name,
         battery: sensor.battery,
         signal: sensor.signal,
         measurement: sensor.measurement,
         measuredProperty: sensor.measuredProperty,
+        lastActive: sensor.lastActive,
         history: history.entries.map(entry => mapToHistoryEntryView(sensor, entry))
     };
 };
