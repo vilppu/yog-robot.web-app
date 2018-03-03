@@ -1,7 +1,3 @@
-var clearToken = function (token) {
-    localStorage.removeItem("idToken");
-};
-
 var storeToken = function (token) {
     localStorage.setItem("idToken", token);
 };

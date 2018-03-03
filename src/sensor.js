@@ -21,7 +21,7 @@ export const isActive = (sensor) => {
 
 export const mapToSensorView = (sensor) => {
     return {
-        key: sensor.sensorId+ "." + sensor.measuredProperty,
+        key: sensor.sensorId + "." + sensor.measuredProperty,
         sensorId: sensor.sensorId,
         name: sensor.sensorName,
         battery: sensor.batteryVoltage + "V",

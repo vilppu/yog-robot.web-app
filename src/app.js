@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { refresh, refreshHistory } from "./actions";
+import { refresh } from "./actions";
 import Sensor from "./sensor-component";
-import "./toast.css";
-import "./layout.css";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     componentDidMount() {
         const { dispatch } = this.props;
@@ -20,7 +18,7 @@ class App extends Component {
         return (
             <div>
                 <header>
-                    <a href="#" id="logout">Poistu</a>
+                    <a id="logout">Poistu</a>
                 </header>
 
                 <div id="content">
@@ -30,7 +28,8 @@ class App extends Component {
                     </div>
 
                     <div id="devices">
-                        {this.props.sensors.map((sensor) => <Sensor sensor={sensor} expanded={false} />)}
+                    { this.props.sensors.map((sensor) => <Sensor sensor={sensor} expanded={false} key={sensor.key} />)
+                    }
                 </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import { login } from "./login.js";
 import { authenticate, getSensors, getHistory } from "./agent-api.js";
-import { setupServiceWorker } from "./firebase-messaging.js";
 import { firebaseConfig } from "./config";
+import { setupFirebaseMessaging } from "./firebase-messaging.js";
 import {
     RECEIVED_SENSORS,
     RECEIVED_HISTORY
@@ -30,10 +30,12 @@ const authenticateToAgent = (dispatch, botId, botKey) => {
 const startLogin = () => {
     return dispatch => {
         return login()
-            .then((user) => {      
-                window.firebase.initializeApp(firebaseConfig);
-                setupServiceWorker();
-                return dispatch(() => authenticateToAgent(dispatch, user.botId, user.botKey));
+            .then((user) => {                
+                return dispatch(() => {
+                    window.firebase.initializeApp(firebaseConfig);
+                    setupFirebaseMessaging(() => dispatch(refreshSensors()));
+                    authenticateToAgent(dispatch, user.botId, user.botKey);}
+                );
             }
             );
     };
@@ -54,7 +56,7 @@ export const refresh = () => {
 
 export const refreshHistory = (sensor) => {
     return (dispatch, getState) => {
-        const state = getState();
+        // const state = getState();
 
         return getHistory(sensor.sensorId, sensor.measuredProperty)
             .then((sensorsHistoryJson) => {
