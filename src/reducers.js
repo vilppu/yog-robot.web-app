@@ -20,7 +20,7 @@ const isActive = (sensor) => {
         var diff = Math.abs(now - sensor.sensorUpdated);
         var hours = Math.floor((diff/1000)/60) / 60;
 
-        return hours <= 24 || true;
+        return hours <= 24;
     }
     else {
         return true;
