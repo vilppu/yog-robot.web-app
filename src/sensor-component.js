@@ -77,7 +77,7 @@ class Sensor extends Component {
                 </a>
                 {expanded &&
                 <div className="sensor-details">
-                    <span className="battery">{this.props.sensor.signal}</span>
+                    <span className="battery">{this.props.sensor.battery}</span>
                     <span className="rssi">{this.props.sensor.signal}</span>
                     <a className="edit-name" onClick={this.toggleEditMode}>&#9998;</a>
                     
