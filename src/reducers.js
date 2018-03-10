@@ -14,17 +14,21 @@ const initialState = {
     sensors: []
 };
 
-const isActive = (sensor) => {
-    if (sensor.sensorUpdated) {
+const hoursSince = (time) => {
+    if (time) {
         var now = new Date();
-        var diff = Math.abs(now - sensor.sensorUpdated);
+        var diff = Math.abs(now - time);
         var hours = Math.floor((diff/1000)/60) / 60;
 
-        return hours <= 24;
+        return hours;
     }
     else {
-        return true;
+        return 0;
     }
+};
+
+const isActive = (sensor) => {
+    return hoursSince(sensor.sensorUpdated) < 240;
 };
 
 const alphabeticOrder = (a, b) => {
@@ -35,7 +39,7 @@ const alphabeticOrder = (a, b) => {
 
 const batteryPercentage = (voltage) => {
     const maxVoltage = 3.25;
-    const minVoltage = 2.75;    
+    const minVoltage = 2.70;    
     const zeroBasedMax = maxVoltage - minVoltage;
     const zeroBasedValue = Math.max(voltage - minVoltage, 0);
     const fraction = zeroBasedValue/zeroBasedMax;
@@ -47,6 +51,10 @@ const batteryPercentage = (voltage) => {
 const reduceSensor = (state, updatedSensor) => {
     const sensorState = state.sensors.find(p => p.key === updatedSensor.sensorId);
     const history = sensorState ? sensorState.history : [];
+    const sensorUpdated = updatedSensor.lastActive
+        ? new Date(updatedSensor.lastActive)
+        : null;
+
     return {
         key: updatedSensor.sensorId,
         name: updatedSensor.sensorName,
@@ -54,7 +62,8 @@ const reduceSensor = (state, updatedSensor) => {
         signal: updatedSensor.signalStrength + "dB",
         measurement: formatMeasurement(updatedSensor.measuredProperty, updatedSensor.measuredValue),
         measuredProperty: updatedSensor.measuredProperty,
-        sensorUpdated: updatedSensor.lastActive ? new Date(updatedSensor.lastActive) : null,
+        sensorUpdated: sensorUpdated,
+        isOffline: hoursSince(sensorUpdated) > 24,
         history: history || []
     };
 };

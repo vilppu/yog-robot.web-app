@@ -74,6 +74,14 @@ header a {
     text-transform: uppercase;
 }
 
+.sensor-status.disabled,
+.sensor-status.disabled .sensor-name,
+.sensor-status.disabled .measurement {
+    opacity: 0.75;
+    cursor: default;
+    text-decoration: line-through;
+}
+
 .sensor-status .measurement .Temperature::after, 
 .history-entry .measurement .Temperature::after {
     content: "\0000B0" "C";

@@ -7,6 +7,7 @@ class Sensor extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            disabled: props.sensor.isOffline,
             expanded: false,
             editMode: false,
             name: props.sensor.name
@@ -22,25 +23,27 @@ class Sensor extends Component {
         event.stopPropagation();
 
         const { sensor, dispatch } = this.props;
-        const { expanded, editMode } = this.state;
+        const { expanded, disabled } = this.state;
         
-        if(!expanded) {
-            dispatch(refreshHistory(sensor));
-        }
+        if(!disabled) {
+            if(!expanded) {
+                dispatch(refreshHistory(sensor));
+            }
 
-        this.setState({
-            expanded: !expanded,
-            editMode: editMode,
-        });
+            this.setState({
+                ...this.state,
+                expanded: !expanded
+            });
+        }
     }
 
     toggleEditMode(event) {
         event.stopPropagation();
 
-        const { expanded, editMode } = this.state;
+        const { editMode } = this.state;
 
         this.setState({
-            expanded: expanded,
+            ...this.state,
             editMode: !editMode,
         });
     }
@@ -66,10 +69,10 @@ class Sensor extends Component {
     }
 
     render() {
-        const { expanded, editMode, name } = this.state;
+        const { expanded, editMode, name, disabled} = this.state;
         return (
             <div className="sensor">
-                <a className="sensor-status" onClick={this.toggleExpanded}>
+                <a  className={"sensor-status" + (disabled ? " disabled" : "")} onClick={this.toggleExpanded}>
                     <div className="sensor-name">{this.props.sensor.name}</div>
                     <div className="measurement">
                         <span className={this.props.sensor.measuredProperty}>{this.props.sensor.measurement}</span>
