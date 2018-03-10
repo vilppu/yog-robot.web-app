@@ -57,21 +57,26 @@ header a {
 .sensor-status .sensor-name,
 .history-entry .sensor-name,
 .history-entry .timestamp,
-.history-entry .measurement
- {
+.history-entry .measurement {
     display: inline-block;
+}
+
+.history-entry .measurement {
+    padding-left: 1em;
+    font-size: 1.2em;
+    text-transform: uppercase;
 }
 
 .sensor-status .measurement {
     display: inline-block;
     padding: 6px;
-    text-transform: uppercase;
     font-size: 1.2em;
+    text-transform: uppercase;
 }
 
 .sensor-status .measurement .Temperature::after, 
 .history-entry .measurement .Temperature::after {
-    content: "°C";
+    content: "\0000B0" "C";
 }
 
 .sensor-status .measurement .RelativeHumidity::after,

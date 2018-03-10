@@ -35,17 +35,17 @@ export const setupFirebaseMessaging = (refreshSensors) => {
 
     messaging.requestPermission()
         .then(() => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
+                    messaging.useServiceWorker(registration);
+                }, function (err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            }
+
             proceed();
         })
         .catch(error => {
             console.log('Unable to get permission to notify.', error);
         });
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
-            messaging.useServiceWorker(registration);
-        }, function (err) {
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    }
 };

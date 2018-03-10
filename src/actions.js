@@ -1,40 +1,52 @@
 import { login } from "./login.js";
-import { authenticate, getSensors, getHistory } from "./agent-api.js";
+import { authenticate, getSensors, getHistory, setSensorName } from "./agent-api.js";
 import { firebaseConfig } from "./config";
 import { setupFirebaseMessaging } from "./firebase-messaging.js";
 import {
     RECEIVED_SENSORS,
-    RECEIVED_HISTORY
+    RECEIVED_HISTORY,
+    SAVED_SENSOR_NAME
 } from "./constants";
 
-const refreshSensors = (dispatch) => {
+export const refreshHistory = (sensor) =>
+    (dispatch, getState) =>
+        getHistory(sensor.key)
+        .then((sensorsHistoryJson) =>
+            dispatch({
+                type: RECEIVED_HISTORY,
+                sensor: sensor,
+                history: JSON.parse(sensorsHistoryJson)
+            })
+        );
+
+const refreshSensors = (dispatch, getState) => {    
+    const state = getState();
+
     return getSensors()
         .then((sensorsJson) => {
             dispatch({
                 type: RECEIVED_SENSORS,
                 loggedIn: true,
                 sensors: JSON.parse(sensorsJson)
-            });
+            });            
+            const sensorsWithHistory = state.sensors.filter(sensor => sensor.history);
+            sensorsWithHistory.forEach(sensor => refreshHistory(sensor)(dispatch, getState));
             }
         );
 };
 
-const authenticateToAgent = (dispatch, botId, botKey) => {
-    return authenticate(botId, botKey)
-        .then(() => {
-            return refreshSensors(dispatch);
-        }
-        );
+const authenticateToAgent = (dispatch, getState, botId, botKey) => {
+    return authenticate(botId, botKey).then(() => refreshSensors(dispatch, getState));
 };
 
 const startLogin = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
         return login()
             .then((user) => {                
                 return dispatch(() => {
                     window.firebase.initializeApp(firebaseConfig);
-                    setupFirebaseMessaging(() => dispatch(refreshSensors()));
-                    authenticateToAgent(dispatch, user.botId, user.botKey);}
+                    setupFirebaseMessaging(() => refreshSensors(dispatch, getState));
+                    authenticateToAgent(dispatch, getState, user.botId, user.botKey);}
                 );
             }
             );
@@ -54,18 +66,15 @@ export const refresh = () => {
     };
 };
 
-export const refreshHistory = (sensor) => {
-    return (dispatch, getState) => {
-        // const state = getState();
-
-        return getHistory(sensor.sensorId, sensor.measuredProperty)
-            .then((sensorsHistoryJson) => {
-                dispatch({
-                    type: RECEIVED_HISTORY,
-                    sensor: sensor,
-                    history: JSON.parse(sensorsHistoryJson)
-                });
-                }
-            );
+export const saveSensorName = (sensor, sensorName) => {
+    return (dispatch, getState) => {      
+        return setSensorName(sensor.key, sensorName)
+        .then(() =>
+            dispatch({
+                type: SAVED_SENSOR_NAME,
+                sensor: sensor,
+                sensorName: sensorName
+            })
+        );
     };
 };

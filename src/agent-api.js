@@ -81,7 +81,7 @@ export const getSensors = (getSensors) => {
     return httpGet(url);
 };
 
-export const getHistory = (sensorId, measeuredProperty) => {
+export const getHistory = (sensorId) => {
     var uri = agentAPI + "/api/sensor/" + sensorId + "/history";
 
     return httpGet(uri);
