@@ -23,7 +23,7 @@ var ensureLoggedIn = () => {
         var options = {
             allowedConnections: [],
             theme: {
-                logo: "/images/login/login.png",
+                logo: "/Images/login/login.png",
                 primaryColor: "green"
             },
             closable: false,
