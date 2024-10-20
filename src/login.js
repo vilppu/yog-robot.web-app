@@ -58,7 +58,7 @@ var ensureLoggedIn = () => {
             authenticated();
         });
 
-        if(authenticating) {
+        if (authenticating) {
             // authenticated event will be sent
         }
         else if (getToken() === null) {

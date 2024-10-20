@@ -1,10 +1,10 @@
 
-importScripts("https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js");
 
 formatNumber = number => {
-        return parseFloat(number).toString().replace(".", ",");
-    };
+    return parseFloat(number).toString().replace(".", ",");
+};
 
 formatMeasurement = (measuredProperty, measuredValue) => {
     switch (measuredProperty) {
@@ -37,7 +37,7 @@ formatMeasurement = (measuredProperty, measuredValue) => {
 };
 
 var formatTimestamp = timestamp => {
-    var date = timestamp.getDate() + "." +  (timestamp.getMonth() + 1) + ".";
+    var date = timestamp.getDate() + "." + (timestamp.getMonth() + 1) + ".";
     var minutes = timestamp.getMinutes() < 10 ? "0" + timestamp.getMinutes() : timestamp.getMinutes();
     var time = "klo " + timestamp.getHours() + ":" + minutes;
 
@@ -55,14 +55,14 @@ messaging.setBackgroundMessageHandler(function (payload) {
     var measurement = formatMeasurement(notification.measuredProperty, notification.measuredValue);
     var notificationTag = notification.deviceId;
     var notificationFilter = {
-          tag: notificationTag
-        };
+        tag: notificationTag
+    };
     var messageBody = measurement + " " + formatTimestamp(new Date(notification.timestamp));
 
     return self.registration.getNotifications(notificationFilter)
-        .then(function(notifications) {
+        .then(function (notifications) {
 
-            for (var i = 0; i < notifications.length; i++) {                
+            for (var i = 0; i < notifications.length; i++) {
                 notifications[i].close();
             }
 
@@ -72,6 +72,6 @@ messaging.setBackgroundMessageHandler(function (payload) {
                 tag: notificationTag
             };
 
-            return self.registration.showNotification(notification.sensorName, notificationOptions);    
-    });
+            return self.registration.showNotification(notification.sensorName, notificationOptions);
+        });
 });

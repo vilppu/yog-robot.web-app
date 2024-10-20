@@ -10,5 +10,10 @@
         "destination": "/build/index.html"
       }
     ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 3000
+    }
   }
 }

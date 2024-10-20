@@ -2,21 +2,22 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunkMiddleware from "redux-thunk";
+import { thunk } from 'redux-thunk';
 import { rootReducer } from "./reducers";
 import App from "./app";
 import "./index.css";
 
 const store = createStore(
   rootReducer,
-  { loggedIn: false,
+  {
+    loggedIn: false,
     sensors: []
   },
   applyMiddleware(
-    thunkMiddleware
+    thunk
   )
 );
- 
+
 class Root extends Component {
   render() {
     return (
