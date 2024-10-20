@@ -1,6 +1,7 @@
 
-importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js");
+
 
 formatNumber = number => {
     return parseFloat(number).toString().replace(".", ",");
@@ -50,7 +51,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function (payload) {
+messaging.onMessage(function (payload) {
     var notification = JSON.parse(payload.data.deviceNotification);
     var measurement = formatMeasurement(notification.measuredProperty, notification.measuredValue);
     var notificationTag = notification.deviceId;
