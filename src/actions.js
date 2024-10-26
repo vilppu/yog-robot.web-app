@@ -1,6 +1,5 @@
 import { login } from "./login.js";
 import { authenticate, getSensors, getHistory, setSensorName } from "./agent-api.js";
-import { firebaseConfig } from "./config";
 import { setupFirebaseMessaging } from "./firebase-messaging.js";
 import {
     RECEIVED_SENSORS,
@@ -11,15 +10,15 @@ import {
 export const refreshHistory = (sensor) =>
     (dispatch, getState) =>
         getHistory(sensor.key)
-        .then((sensorsHistoryJson) =>
-            dispatch({
-                type: RECEIVED_HISTORY,
-                sensor: sensor,
-                history: JSON.parse(sensorsHistoryJson)
-            })
-        );
+            .then((sensorsHistoryJson) =>
+                dispatch({
+                    type: RECEIVED_HISTORY,
+                    sensor: sensor,
+                    history: JSON.parse(sensorsHistoryJson)
+                })
+            );
 
-const refreshSensors = (dispatch, getState) => {    
+const refreshSensors = (dispatch, getState) => {
     const state = getState();
 
     return getSensors()
@@ -28,10 +27,10 @@ const refreshSensors = (dispatch, getState) => {
                 type: RECEIVED_SENSORS,
                 loggedIn: true,
                 sensors: JSON.parse(sensorsJson)
-            });            
+            });
             const sensorsWithHistory = state.sensors.filter(sensor => sensor.history);
             sensorsWithHistory.forEach(sensor => refreshHistory(sensor)(dispatch, getState));
-            }
+        }
         );
 };
 
@@ -42,11 +41,11 @@ const authenticateToAgent = (dispatch, getState, botId, botKey) => {
 const startLogin = () => {
     return (dispatch, getState) => {
         return login()
-            .then((user) => {                
-                return dispatch(() => {
-                    window.firebase.initializeApp(firebaseConfig);
-                    setupFirebaseMessaging(() => refreshSensors(dispatch, getState));
-                    authenticateToAgent(dispatch, getState, user.botId, user.botKey);}
+            .then((user) => {
+                return dispatch(async () => {
+                    await setupFirebaseMessaging(() => refreshSensors(dispatch, getState));
+                    authenticateToAgent(dispatch, getState, user.botId, user.botKey);
+                }
                 );
             }
             );
@@ -67,14 +66,14 @@ export const refresh = () => {
 };
 
 export const saveSensorName = (sensor, sensorName) => {
-    return (dispatch, getState) => {      
+    return (dispatch, getState) => {
         return setSensorName(sensor.key, sensorName)
-        .then(() =>
-            dispatch({
-                type: SAVED_SENSOR_NAME,
-                sensor: sensor,
-                sensorName: sensorName
-            })
-        );
+            .then(() =>
+                dispatch({
+                    type: SAVED_SENSOR_NAME,
+                    sensor: sensor,
+                    sensorName: sensorName
+                })
+            );
     };
 };

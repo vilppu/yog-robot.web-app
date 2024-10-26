@@ -1,51 +1,22 @@
 import { registerClient } from "./agent-api";
+import { firebaseConfig } from "./config";
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-export const setupFirebaseMessaging = (refreshSensors) => {
-    const messaging = window.firebase.messaging();
+export const setupFirebaseMessaging = async (refreshSensors) => {
+    const app = initializeApp(firebaseConfig);
 
-    var proceed = () => {
-        messaging.getToken()
-            .then(currentToken => {
-                if (currentToken) {
-                    registerClient(currentToken);
-                } else {
-                    console.log('No Instance ID token available. Request permission to generate one.');
-                }
-            })
-            .catch(error => {
-                console.log('An error occurred while retrieving token. ', error);
-            });
-    };
+    const messaging = getMessaging(app);
+    await Notification.requestPermission();
+    const token = await getToken(messaging, { vapidKey: "BJh6qgRwaxOW3Vt-1QmgyFNKUedagBDGaoFFtMMINXQo7bxyUGHcOD0O-6o4qqmuG3mJK-UVdEOQlIqvWYhzskA" });
 
-    messaging.onMessage(function (payload) {
+    registerClient(token);
+
+    onMessage(messaging, function (payload) {
         refreshSensors();
     });
 
-    messaging.onTokenRefresh(() => {
-        messaging.getToken()
-            .then(refreshedToken => {
-                window.setTokenSentToServer(false);
-                window.sendTokenToServer(refreshedToken);
-            })
-            .catch(error => {
-                console.log('Unable to retrieve refreshed token ', error);        
-                window.showToken('Unable to retrieve refreshed token ', error);        
-            });
-    });
-
-    messaging.requestPermission()
-        .then(() => {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/firebase-messaging-sw.js').then(registration => {
-                    messaging.useServiceWorker(registration);
-                }, function (err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            }
-
-            proceed();
-        })
-        .catch(error => {
-            console.log('Unable to get permission to notify.', error);
-        });
+    if ('serviceWorker' in navigator) {
+        await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    }
 };

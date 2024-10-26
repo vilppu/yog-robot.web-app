@@ -1,6 +1,5 @@
-
-importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js");
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
 
 
 formatNumber = number => {
@@ -46,12 +45,19 @@ var formatTimestamp = timestamp => {
 };
 
 firebase.initializeApp({
-    "messagingSenderId": "900133155210"
+    apiKey: "AIzaSyBpmkFfL8OqhotFd3Xeg7vQXuFLmKcOwZE",
+    authDomain: "yogbot-2d3a4.firebaseapp.com",
+    databaseURL: "https://yogbot-2d3a4.firebaseio.com",
+    projectId: "yogbot-2d3a4",
+    storageBucket: "yogbot-2d3a4.appspot.com",
+    messagingSenderId: "900133155210",
+    appId: "1:900133155210:web:8b8add16d6ae311af4d873",
+    measurementId: "G-30857E7654"
 });
 
 const messaging = firebase.messaging();
 
-messaging.onMessage(function (payload) {
+messaging.onBackgroundMessage(payload => {
     var notification = JSON.parse(payload.data.deviceNotification);
     var measurement = formatMeasurement(notification.measuredProperty, notification.measuredValue);
     var notificationTag = notification.deviceId;
